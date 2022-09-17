@@ -1,0 +1,28 @@
+name: Validate Terraform files
+
+on: [pull_request]
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3   
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.0
+        with:
+          terraform_version: 0.15.4
+      - name: Check terraform-docs up to date.
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          fail-on-diff: "true"
+      - name: Run `terraform fmt`
+        id: fmt
+        run: terraform fmt -diff -check -no-color      
+      - name: Run `terraform init`
+        id: init
+        run: terraform init      
+      - name: Run `terraform validate`
+        id: validate
+        run: terraform validate -no-color
