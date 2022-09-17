@@ -1,0 +1,77 @@
+name: Release 
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get version from tag
+        id: tag_name
+        run: |
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/}
+        shell: bash
+      - name: Checkout
+        if: steps.tag_name.outputs.current_version != ''
+        uses: actions/checkout@v3
+      - name: Get Changelog Entry
+        id: changelog_reader
+        if: steps.tag_name.outputs.current_version != ''
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.tag_name.outputs.current_version }}
+      - name: Sanitize CHANGELOG
+        id: sanitize
+        if: steps.tag_name.outputs.current_version != ''
+        run: |
+          export CHANGELOG="${{ steps.changelog_reader.outputs.changes }}"
+          CHANGELOG="${CHANGELOG//$'\n'/\\n}"
+          echo "::set-output name=changelog::$(echo "$CHANGELOG")"
+      - name: Create release
+        if: steps.tag_name.outputs.current_version != ''
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+          body: ${{ steps.changelog_reader.outputs.changes }}
+      - name: Post to a Slack channel
+        id: slack
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        if: steps.tag_name.outputs.current_version != '' && env.SLACK_CHANNEL_ID != ''
+        uses: slackapi/slack-github-action@v1.16.0
+        with:
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "${{ github.event.repository.name }} new release [${{ github.ref }}]",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*${{ github.event.repository.name }}* new release [${{ steps.tag_name.outputs.current_version }}]"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "```${{ steps.sanitize.outputs.changelog }}```"
+                  }
+                }
+              ]
+            }
+          
