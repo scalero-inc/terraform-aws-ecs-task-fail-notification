@@ -19,7 +19,7 @@ logging.getLogger('botocore').setLevel(logging.CRITICAL)
 
 def is_fail_event(event):
     if event['detail']['containers'][0]['exitCode'] != 0:
-        if "Essential container" in event['detail']['stoppedReason']:
+        if "Scaling activity initiated" not in event['detail']['stoppedReason']:
             return True
     return False
 
