@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.1.2] - 2023-08-24
+
+### Fixed
+
+- Fix alert logic to not alert when stopped reason is instance drain.
+
 ## [0.1.1] - 2023-08-04
 
 ### Fixed
