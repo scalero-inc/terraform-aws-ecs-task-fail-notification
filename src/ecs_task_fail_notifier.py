@@ -19,7 +19,11 @@ logging.getLogger('botocore').setLevel(logging.CRITICAL)
 
 def is_fail_event(event):
     if event['detail']['containers'][0]['exitCode'] != 0:
-        if "Scaling activity initiated" not in event['detail']['stoppedReason']:
+        if "Scaling activity initiated" in event['detail']['stoppedReason']:
+            return False
+        elif "container instance is in DRAINING state" in event['detail']['stoppedReason']:
+            return False
+        else:
             return True
     return False
 
