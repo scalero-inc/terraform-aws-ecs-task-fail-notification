@@ -31,12 +31,12 @@ resource "aws_cloudwatch_event_target" "ecs_task_stop_event" {
 
 module "ecs_task_fail_notification" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "6.0.0"
+  version = "4.10.1"
 
   function_name = "ecs_task_fail_notification"
   description   = "Function that filters ECS task stop events, filter the not expected events and send slack notification."
   handler       = "ecs_task_fail_notifier.lambda_handler"
-  runtime       = "python3.10"
+  runtime       = "python3.8"
   timeout       = 15
 
   source_path = "${path.module}/src"
