@@ -1,0 +1,9 @@
+---
+version: 2
+
+registries:
+ scalero:
+   type: terraform-registry
+   url: https://app.terraform.io
+   token: ${{ secrets.TFE_TEAM_TOKEN_MODULE_ACCESS_RO }}
+
