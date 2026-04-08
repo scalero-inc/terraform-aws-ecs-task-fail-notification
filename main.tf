@@ -36,7 +36,7 @@ module "ecs_task_fail_notification" {
   function_name = "ecs_task_fail_notification"
   description   = "Function that filters ECS task stop events, filter the not expected events and send slack notification."
   handler       = "ecs_task_fail_notifier.lambda_handler"
-  runtime       = "python3.8"
+  runtime       = "python3.12"
   timeout       = 15
 
   source_path = "${path.module}/src"
