@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.1.4] - 2026-04-08
+
+### Changed
+
+- Bump Lambda runtime from `python3.8` (EOL) to `python3.12`.
+
+## [0.1.3] - 2023-08-26
+
+### Fixed
+
+- Update dependencies.
+
 ## [0.1.2] - 2023-08-24
 
 ### Fixed
