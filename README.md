@@ -33,7 +33,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ecs_task_fail_notification"></a> [ecs\_task\_fail\_notification](#module\_ecs\_task\_fail\_notification) | terraform-aws-modules/lambda/aws | 6.0.0 |
+| <a name="module_ecs_task_fail_notification"></a> [ecs\_task\_fail\_notification](#module\_ecs\_task\_fail\_notification) | terraform-aws-modules/lambda/aws | 4.10.1 |
 
 ## Resources
 
